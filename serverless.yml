@@ -1,13 +1,19 @@
-service: serverless-app
+service: ecommerce-serverless-app
 frameworkVersion: '2'
 
 provider:
   name: aws
-  runtime: nodejs16.x
+  runtime: nodejs20.x
   lambdaHashingVersion: 20201221
   stage: dev
   region: us-east-1
 
 functions:
-  hello:
-    handler: handler.hello
+  #this is lambda functions that responsible of execution a piece of code
+  createProduct:
+    handler: handler.createProduct
+    events:
+      #http event
+      - http:
+          method: post
+          path: products
