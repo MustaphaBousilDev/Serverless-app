@@ -29,3 +29,19 @@ functions:
       - http:
           method: delete 
           path: product/{id}
+
+#CloudFormation Resource templates 
+#-->congif for creating databasa in dynamoDB
+resources:
+  Resources:
+    productsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: productsId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: productsId
+            KeyType: HASH
