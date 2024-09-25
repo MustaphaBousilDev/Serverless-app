@@ -1,4 +1,4 @@
-service: ecommerce-serverless-app
+service: ecommerce-serverless-app-new
 frameworkVersion: '2'
 
 provider:
@@ -17,3 +17,15 @@ functions:
       - http:
           method: post
           path: products
+  updateProduct:
+    handler: handler.updateProduct
+    events:
+      - http:
+          method: put 
+          path: product/{id}
+  deleteProduct:
+    handler: handler.deleteProduct
+    events:
+      - http:
+          method: delete 
+          path: product/{id}
