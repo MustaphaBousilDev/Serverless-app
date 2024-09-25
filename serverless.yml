@@ -12,6 +12,12 @@ functions:
   #this is lambda functions that responsible of execution a piece of code
   createProduct:
     handler: handler.createProduct
+    iamRoleStatements:
+      - Effect: Allow 
+        Action: 
+          - dynamodb:PutItem
+        Resource: 
+          - !GetAtt productsTable.Arn
     events:
       #http event
       - http:
@@ -29,6 +35,10 @@ functions:
       - http:
           method: delete 
           path: product/{id}
+
+
+plugins:
+  - serverless-iam-roles-per-function
 
 #CloudFormation Resource templates 
 #-->congif for creating databasa in dynamoDB
