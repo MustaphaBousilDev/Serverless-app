@@ -12,6 +12,8 @@ functions:
   #this is lambda functions that responsible of execution a piece of code
   createProduct:
     handler: handler.createProduct
+    environment:
+      PRODUCTS_TABLE_NAME: !Ref  productsTable
     iamRoleStatements:
       - Effect: Allow 
         Action: 
@@ -25,6 +27,14 @@ functions:
           path: products
   updateProduct:
     handler: handler.updateProduct
+    environment:
+      PRODUCTS_TABLE_NAME: !Ref  productsTable
+    iamRoleStatements:
+      - Effect: Allow 
+        Action: 
+          - dynamodb:UpdateItem
+        Resource: 
+          - !GetAtt productsTable.Arn
     events:
       - http:
           method: put 
