@@ -41,6 +41,14 @@ functions:
           path: product/{id}
   deleteProduct:
     handler: handler.deleteProduct
+    environment:
+      PRODUCTS_TABLE_NAME: !Ref  productsTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:DeleteItem
+        Resource: 
+          - !GetAtt productsTable.Arn
     events:
       - http:
           method: delete 

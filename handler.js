@@ -6,7 +6,7 @@ const PRODUCTS_TABLE_NAME = process.env.PRODUCTS_TABLE_NAME
 const send = (statusCode, data) =>{
   return {
     statusCode,
-    body: JSON.stringify(data)
+    body: JSON.stringify(data),
   }
 }
 
@@ -58,10 +58,19 @@ module.exports.updateProduct = async (event, context, cb) => {
   }
 }
 
-module.exports.deleteProduct = async (event) => {
-  let nodeList = 6;
-  return {
-    statusCode: 200,
-    body: JSON.stringify("The not with id" + nodeList + "has ben deleted")
+module.exports.deleteProduct = async (event, context, cb) => {
+  let productsId = event.pathParameters.id;
+  try {
+    const params = {
+      TableName: PRODUCTS_TABLE_NAME,
+      Key: { productsId },
+      ConditionExpression: 'attribute_exists(productsId)'
+    }
+    await documentClient.delete(params).promise();
+    cb(null, send(200, productsId))
+    
+  } catch(err){
+     cb(null, send(500, err.message))
+     console.log(err)
   }
 }
