@@ -74,3 +74,15 @@ module.exports.deleteProduct = async (event, context, cb) => {
      console.log(err)
   }
 }
+
+module.exports.getAllProduct = async (event, context, cb) => {
+  try {
+    const params = {
+      TableName: PRODUCTS_TABLE_NAME
+    }
+    const products = await documentClient.scan(params).promise()
+    cb(null, send(200, products))
+  } catch (err) {
+    cb(null, send(500 , err.message))
+  }
+}

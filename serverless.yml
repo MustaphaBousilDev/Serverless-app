@@ -53,7 +53,19 @@ functions:
       - http:
           method: delete 
           path: product/{id}
-
+  getAllProduct:
+    handler: handler.getAllProduct
+    environment:
+      PRODUCTS_TABLE_NAME: !Ref  productsTable
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Scan
+        Resource: !GetAtt productsTable.Arn
+    events:
+      - http:
+          method: get 
+          path: product
 
 plugins:
   - serverless-iam-roles-per-function
