@@ -1,6 +1,12 @@
 'use strict';
 const DynamoDB = require('aws-sdk/clients/dynamodb')
-const documentClient = new DynamoDB.DocumentClient({ region: 'us-east-1' })
+const documentClient = new DynamoDB.DocumentClient({ 
+  region: 'us-east-1',
+  maxRetries: 3,
+  httpOptions: {
+    timeout: 5000,
+  }
+})
 const PRODUCTS_TABLE_NAME = process.env.PRODUCTS_TABLE_NAME
 
 const send = (statusCode, data) =>{
@@ -11,6 +17,8 @@ const send = (statusCode, data) =>{
 }
 
 module.exports.createProduct = async (event, context, cb) => {
+  //the function will send the response cb(null, send(201,data))  back immediately after the item is put, without waiting for any other asynchronous tasks to complete
+  context.callbackWaitsForEmptyEventLoop = false
   let data = JSON.parse(event.body)
   try {
     const params = {
@@ -33,6 +41,8 @@ module.exports.createProduct = async (event, context, cb) => {
 //update product
 //update product
 module.exports.updateProduct = async (event, context, cb) => {
+  //the function will send the response cb(null, send(201,data))  back immediately after the item is put, without waiting for any other asynchronous tasks to complete
+  context.callbackWaitsForEmptyEventLoop = false
   let productsId = event.pathParameters.id
   let data = JSON.parse(event.body) // Fixing JSON.parse typo
   try {
@@ -59,6 +69,8 @@ module.exports.updateProduct = async (event, context, cb) => {
 }
 
 module.exports.deleteProduct = async (event, context, cb) => {
+  //the function will send the response cb(null, send(201,data))  back immediately after the item is put, without waiting for any other asynchronous tasks to complete
+  context.callbackWaitsForEmptyEventLoop = false
   let productsId = event.pathParameters.id;
   try {
     const params = {
@@ -76,6 +88,8 @@ module.exports.deleteProduct = async (event, context, cb) => {
 }
 
 module.exports.getAllProduct = async (event, context, cb) => {
+  //the function will send the response cb(null, send(201,data))  back immediately after the item is put, without waiting for any other asynchronous tasks to complete
+  context.callbackWaitsForEmptyEventLoop = false
   try {
     const params = {
       TableName: PRODUCTS_TABLE_NAME
